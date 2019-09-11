@@ -2,9 +2,10 @@ package juegos;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class Crupier extends Jugador {
-	//protected  ArrayList<Carta> mazo = new  ArrayList<Carta>();
+	BarajaInglesa barajaInl = new BarajaInglesa();
 	int monto ;
 	public Crupier(int monto) {
 		super();
@@ -12,35 +13,15 @@ public class Crupier extends Jugador {
 		
 	}
 	
-	public String mostrarMano() {
-		String cadena = "";
-		this.acumulado=0;
-		this.acumuladoAlterno=0;
-		for(int i = 0 ; i< this.mano.size(); i++) {
-			cadena = cadena  + this.mano.get(i).toString() + "\n";
-			if(!this.mano.get(i).abierta)
-				continue;
-			if(this.mano.get(i).valorAlterno==11) {
-				this.acumulado =  this.acumulado + this.mano.get(i).num;
-				this.acumuladoAlterno = this.acumuladoAlterno + this.mano.get(i).valorAlterno;
-			}
-			else {
-				this.acumulado =  this.acumulado + this.mano.get(i).valorAlterno;
-				this.acumuladoAlterno = this.acumuladoAlterno + this.mano.get(i).valorAlterno;
-				
-			}
-			
-		}
-		return cadena;
-	}
 	
-	public void Barajar(ArrayList<Carta> mazo) {
+	
+	public void Barajar() {
 		
-		Collections.shuffle(mazo);
+		Collections.shuffle(barajaInl.mazo);
 	}
 	
 	
-	public void manoInicial(ArrayList<Carta> mazo, ArrayList<Apostador> jugadores) {
+	public void manoInicial(ArrayList<Apostador> jugadores) {
 		
 			  int tamanio= jugadores.size()*2;
 			  int j = 0;
@@ -49,7 +30,7 @@ public class Crupier extends Jugador {
 				  if(i == jugadores.size())
 					  i=0;
 				  for( Apostador jugador : jugadores) {
-					  jugadores.get(i).mano.add(mazo.remove(mazo.size()-1));
+					  jugadores.get(i).mano.add(barajaInl.mazo.remove(barajaInl.mazo.size()-1));
 					  
 					  i++; j++;
 					  
@@ -58,17 +39,15 @@ public class Crupier extends Jugador {
 				  
 			  }
 			  
-			  this.mano.add(mazo.remove(mazo.size()-1));
-			  this.mano.add(mazo.remove(mazo.size()-1));
+			  this.mano.add(barajaInl.mazo.remove(barajaInl.mazo.size()-1));
+			  this.mano.add(barajaInl.mazo.remove(barajaInl.mazo.size()-1));
 			  this.mano.get(mano.size()-1).setAbierta(false);
 		}
 	
-	public void turnoCrupier(ArrayList<Carta> mazo, ArrayList<Apostador> jugadores) {
-		//destapar carta cerrada
-		//sumar acumulados y si es menor a 17 sigue sacando del mazo de lo contrario se planta el crupier
-		//evaluar quien tiene mas o menos puntos que el crupier para pagar
-		//evaluar si quieren seguir jugando
+	public void turnoCrupier(boolean masDeBlackJack) {
 		
+		
+		if(!masDeBlackJack) {
 		this.mano.get(mano.size()-1).setAbierta(true);
 		this.acumulado =  this.acumulado + this.mano.get(this.mano.size()-1).valorAlterno;
 		this.acumuladoAlterno = this.acumuladoAlterno + this.mano.get(this.mano.size()-1).valorAlterno;
@@ -80,39 +59,44 @@ public class Crupier extends Jugador {
 		
 		while (true) {
 			if(this.acumuladoAlterno == 21 || this.acumulado ==21) {
+				
+				this.blackJack = true;
+				
 				System.out.println("Crupier "+ "\n" 
 						+ "En tu mano tienes: "
 						+ "\n"+this.mostrarMano()
 						+ "Puntos Normales: " + this.acumulado
 						+ "\n"+ "Puntos Alternos: " + this.acumuladoAlterno + "\n");
-				System.out.println("Crupier gana con BlackJack");
+				System.out.println("Crupier tiene BlackJack"+"\n");
 				break;
 			}
-			if(this.acumulado > 21 || this.acumuladoAlterno > 21) {
+			if(this.acumulado > 21) {
+				this.masDeBlackJack = true;
 				System.out.println("Crupier "+ "\n" 
 						+ "En tu mano tienes: "
 						+ "\n"+this.mostrarMano()
 						+ "Puntos Normales: " + this.acumulado
 						+ "\n"+ "Puntos Alternos: " + this.acumuladoAlterno + "\n");
-				System.out.println("Crupier pierde por pasarse de 21");
+				System.out.println("Crupier se ha pasado de 21"+"\n");
 				break;
 			}
-			if(this.acumulado>17) {
+			if(this.acumulado>=17) {
 				System.out.println("Crupier "+ "\n" 
 						+ "En tu mano tienes: "
 						+ "\n"+this.mostrarMano()
 						+ "Puntos Normales: " + this.acumulado
 						+ "\n"+ "Puntos Alternos: " + this.acumuladoAlterno + "\n");
-				System.out.println("Crupier se planta");
+				System.out.println("Crupier se planta"+"\n");
 				break;
 			}else {
-				this.mano.add(mazo.remove(mazo.size()-1));
+				this.mano.add(barajaInl.mazo.remove(barajaInl.mazo.size()-1));
 			this.acumulado =  this.acumulado + this.mano.get(this.mano.size()-1).valorAlterno;
 			this.acumuladoAlterno = this.acumuladoAlterno + this.mano.get(this.mano.size()-1).valorAlterno;
 			}
 			
 			}
-			
+		}
+		return;
 		}
 	
 		
@@ -124,25 +108,190 @@ public class Crupier extends Jugador {
 
 	
 	
-	public void repartirCarta(ArrayList<Carta> mazo, Apostador jugadores) {
+	public int repartirCarta(Apostador jugadores) {
 		
 		
 		
-		jugadores.mano.add(mazo.remove(mazo.size()-1));
-		    
-			System.out.println("Jugador: "+jugadores.nombre+ "\n" +
-			"En tu mano tienes: "+"\n"+jugadores.mostrarMano()
-			+ "Puntos Normales: " + jugadores.acumulado
-			+ "\n"+ "Puntos Alternos: " + jugadores.acumuladoAlterno+ "\n"
-					);
+		jugadores.mano.add(barajaInl.mazo.remove(barajaInl.mazo.size()-1));
 		
-	}
-
-	@Override
-	protected void plantarse() {
-		// TODO Auto-generated method stub
+		
+			jugadores.mostrarMano();
+			if(jugadores.acumuladoAlterno == 21 || jugadores.acumulado ==21) {
+				
+				jugadores.blackJack = true;
+				
+				System.out.println(jugadores.nombre+ "\n" 
+						+ "En tu mano tienes: "
+						+ "\n"+jugadores.mostrarMano()
+						+ "Puntos Normales: " + jugadores.acumulado
+						+ "\n"+ "Puntos Alternos: " + jugadores.acumuladoAlterno + "\n");
+				
+				System.out.println("Tienes BlackJack");
+				return 1;
+			}
+			if(jugadores.acumulado > 21) {
+				jugadores.masDeBlackJack = true;
+				System.out.println(jugadores.nombre+ "\n" 
+						+ "En tu mano tienes: "
+						+ "\n"+jugadores.mostrarMano()
+						+ "Puntos Normales: " + jugadores.acumulado
+						+ "\n"+ "Puntos Alternos: " + jugadores.acumuladoAlterno + "\n");
+				System.out.println("Te pasaste de 21");
+				return 2;
+			}
+			System.out.println(jugadores.nombre+ "\n" 
+					+ "En tu mano tienes: "
+					+ "\n"+jugadores.mostrarMano()
+					+ "Puntos Normales: " + jugadores.acumulado
+					+ "\n"+ "Puntos Alternos: " + jugadores.acumuladoAlterno + "\n");
+			 return 3;
 		
 	}
 	
+	public void cobrar(ArrayList<Apostador> jugadores) {
+		
+		for(int i = 0; i<jugadores.size();i++) {
+			
+			if(jugadores.get(i).masDeBlackJack==true) {
+				System.out.println("El crupier le ganó con al jugador " + jugadores.get(i).nombre +" porque se pasó de 21");
+				this.monto = this.monto + jugadores.get(i).apuestaInicial;
+				jugadores.get(i).monto = jugadores.get(i).monto - jugadores.get(i).apuestaInicial;
+				continue;
+			}
+			
+			if(this.blackJack== true && jugadores.get(i).blackJack==true) {
+				System.out.println("Crupier y el jugador: " + jugadores.get(i).nombre + " empataron con BlackJack");
+				continue;
+			}
+			if(this.masDeBlackJack && !jugadores.get(i).masDeBlackJack ) {
+				
+				System.out.println("El jugador " + jugadores.get(i).nombre + " gana, crupier se pasó de 21");
+				jugadores.get(i).monto = jugadores.get(i).monto + jugadores.get(i).apuestaInicial;
+				this.monto = this.monto-jugadores.get(i).apuestaInicial;
+				continue;
+				
+			} 
+			if(!this.masDeBlackJack && jugadores.get(i).masDeBlackJack) {
+				
+				System.out.println("El crupier le ganó con BlackJack al jugador " + jugadores.get(i).nombre);
+				this.monto = this.monto + jugadores.get(i).apuestaInicial;
+				jugadores.get(i).monto = jugadores.get(i).monto - jugadores.get(i).apuestaInicial;
+				continue;
+			}
+			
+			
+			if(this.blackJack && !jugadores.get(i).masDeBlackJack ) {
+				
+				System.out.println("Crupier gana por BlackJack a " + jugadores.get(i).nombre);
+				this.monto = this.monto + jugadores.get(i).apuestaInicial;
+				jugadores.get(i).monto = jugadores.get(i).monto - jugadores.get(i).apuestaInicial;
+				continue;
+				
+			}
+			
+			if(jugadores.get(i).blackJack && !this.blackJack) {
+				
+				System.out.println("El jugador " + jugadores.get(i).nombre +" gana con BlackJack");
+				jugadores.get(i).monto = jugadores.get(i).monto + jugadores.get(i).apuestaInicial;
+				this.monto = this.monto-jugadores.get(i).apuestaInicial;
+				continue;
+			}
+			
+			if(this.acumulado<jugadores.get(i).acumulado || this.acumulado<jugadores.get(i).acumuladoAlterno ) {
+				System.out.println("El jugador " + jugadores.get(i).nombre +" gana con mayor puntaje");
+				jugadores.get(i).monto = jugadores.get(i).monto + jugadores.get(i).apuestaInicial;
+				this.monto = this.monto-jugadores.get(i).apuestaInicial;
+				continue;
+			}
+			
+			if(this.acumulado>jugadores.get(i).acumulado) {
+				System.out.println("Crupier gana por mayoria de puntos a " + jugadores.get(i).nombre);
+				this.monto = this.monto + jugadores.get(i).apuestaInicial;
+				jugadores.get(i).monto = jugadores.get(i).monto - jugadores.get(i).apuestaInicial;
+				continue;
+			}
+			
+			if(this.acumulado==jugadores.get(i).acumulado) {
+				
+				System.out.println("Crupier y el jugador " + jugadores.get(i).nombre + " empataron con mismos puntos");
+				
+				continue;
+			}
+		
+			
+		}
+	}
 	
+public void nuevaRonda(ArrayList<Apostador> jugadores) {
+	
+	int opc = 0;
+	Scanner scan = new Scanner(System.in);
+	int nuevaApuesta=0;
+	
+	 
+	for(int i = 0; i<jugadores.size();i++) {
+		
+		opc = 0;
+		
+	 while(opc!=3){
+			
+			System.out.println("Jugador: " +jugadores.get(i).nombre+" ¿Deseas seguir jugando?");
+			
+			System.out.println("1 - Si"+"\n");
+	        System.out.println("2 - No"+"\n");
+    
+	        opc = scan.nextInt();
+	        
+			switch(opc) {
+			case 1: 
+				System.out.println("¿Cual es la cantidad de tu nueva apuesta?");
+				nuevaApuesta = scan.nextInt();
+				jugadores.get(i).setApuestaInicial(nuevaApuesta);
+				jugadores.get(i).acumulado = 0;
+				jugadores.get(i).acumuladoAlterno=0;
+				jugadores.get(i).blackJack=false;
+				jugadores.get(i).masDeBlackJack=false;
+				
+				barajaInl.mazo.addAll(jugadores.get(i).mano);  
+				jugadores.get(i).mano.removeAll(jugadores.get(i).mano);
+				opc = 3;
+				break;
+			
+			case 2:
+				System.out.println("Hasta luego y gracias por jugar " + jugadores.get(i).nombre + "!");
+				barajaInl.mazo.addAll(jugadores.get(i).mano);  
+				jugadores.get(i).acumulado = 0;
+				jugadores.get(i).acumuladoAlterno=0;
+				jugadores.get(i).blackJack=false;
+				jugadores.get(i).masDeBlackJack=false;
+				jugadores.get(i).mano.removeAll(jugadores.get(i).mano);
+				jugadores.remove(i);
+				i=0;
+				opc=3;
+				break;
+				
+			}
+		
+			
+	 
+			
+			}
+			
+		}
+	this.acumulado = 0;
+	this.acumuladoAlterno =0;
+	this.blackJack = false;
+	this.masDeBlackJack = false;
+barajaInl.mazo.addAll(this.mano);
+this.mano.removeAll(mano);
 }
+}
+		
+		
+		
+	
+
+	
+	
+	
+

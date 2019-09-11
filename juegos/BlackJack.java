@@ -72,8 +72,8 @@ public class BlackJack {
 						continue;
 					}
 					//Se agregan apostadores a la mesa de juego.
-					montoJugador = montoJugador - apuestaInicial;
-					jugadores.add(new Apostador(montoJugador, nombreJugador,apuestaInicial));
+					//montoJugador = montoJugador - apuestaInicial;
+					jugadores.add(new Apostador(montoJugador, nombreJugador,apuestaInicial,true));
 				}catch(Exception e) {
 					scan.next();
 					System.out.println("Ingreso erroneo de datos, volver a empezar el ingreso del Jugador "+(i+1));
@@ -90,14 +90,20 @@ public class BlackJack {
 	}
 	
 	private void iniciar(Crupier crupier, ArrayList<Apostador> jugadores) {
-		BarajaInglesa barajaInl = new BarajaInglesa();
-		crupier.Barajar(barajaInl.mazo);
-		crupier.manoInicial(barajaInl.mazo, jugadores);
-		
+		int var = 0 ;
 		int vuelta = jugadores.size();
 		int opc = 0;
+		boolean masDeBlackJack= false;
+		
+		
+		do {
+		
+		//BarajaInglesa barajaInl = new BarajaInglesa();
+		crupier.Barajar();
+		crupier.manoInicial(jugadores);
+		
 		//Inicia Rondas
-		System.out.println("Crupier "+ "\n" 
+		System.out.println("Crupier "+ "\n\n" 
 				+ "En tu mano tienes: "
 				+ "\n"+crupier.mostrarMano()
 				+ "Puntos Normales: " + crupier.acumulado
@@ -107,39 +113,54 @@ public class BlackJack {
 		for(int i = 0 ; i < jugadores.size(); i++) {
 			System.out.println("Jugador: "+jugadores.get(i).nombre+ "\n" +
 		    "Tu apuesta inicial es de: " + jugadores.get(i).apuestaInicial+ "\n" +
-			"Tu monto es de: " + jugadores.get(i).monto+ "\n"+
-			"En tu mano tienes: "+"\n"+jugadores.get(i).mostrarMano()
+			"Tu monto es de: " + jugadores.get(i).monto+ "\n\n"+
+			"En tu mano tienes: "+"\n"+jugadores.get(i).mostrarMano() + "\n" 
 			+ "Puntos Normales: " + jugadores.get(i).acumulado
 			+ "\n"+ "Puntos Alternos: " + jugadores.get(i).acumuladoAlterno+ "\n");
+			 
+			opc = 0;
 			
-			do {
+			 while(opc!=3){
 				
 				System.out.println("¿Cuál es tu decision?");
 				
 				System.out.println("1 - Pedir una carta");
 		        System.out.println("2 - Doblar");
 		        System.out.println("3 - Plantarse");
-		       // System.out.println("0 - Fin del turno de " +jugadores.get(i).nombre);
-				
+		     
 		        opc = scan.nextInt();
 		        
 				switch(opc) {
 				case 1: 
-				crupier.repartirCarta(barajaInl.mazo,jugadores.get(i));
+					var = crupier.repartirCarta(jugadores.get(i));
+				if(var <=2) {
+					opc = 3;
+					masDeBlackJack= jugadores.get(i).masDeBlackJack;
+					System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
+					break;
+				}
 				break;
 				
 				case 2:
-				//break;
-				case 3: System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
+				break;
+				
+				case 3: 
+					jugadores.get(i).plantarse();
+					System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
+				opc = 3;
 				break;
 				}
 				
-				
-			}while(opc!=3);
-			
+			}
+	
 		}
+		
 		System.out.println("Turno del crupier");
-		crupier.turnoCrupier(barajaInl.mazo,jugadores);
+		crupier.turnoCrupier(masDeBlackJack);
+		crupier.cobrar(jugadores);
+		crupier.nuevaRonda(jugadores);
+		}while(jugadores.size()!=0);
+		}
 		//destapar carta cerrada
 		//sumar acumulados y si es menor a 17 sigue sacando del mazo de lo contrario se planta el crupier
 		//evaluar quien tiene mas o menos puntos que el crupier para pagar
@@ -148,7 +169,7 @@ public class BlackJack {
 		
 		/**/
 		
-	}
+	
 	
 	
 	
