@@ -94,7 +94,7 @@ public class BlackJack {
 		int vuelta = jugadores.size();
 		int opc = 0;
 		boolean masDeBlackJack= false;
-		
+		boolean esBlackJack = false;
 		
 		do {
 		
@@ -119,7 +119,9 @@ public class BlackJack {
 			+ "\n"+ "Puntos Alternos: " + jugadores.get(i).acumuladoAlterno+ "\n");
 			 
 			opc = 0;
-			
+			masDeBlackJack = false;
+		    esBlackJack = false;
+		    
 			 while(opc!=3){
 				
 				System.out.println("¿Cuál es tu decision?");
@@ -135,7 +137,8 @@ public class BlackJack {
 					var = crupier.repartirCarta(jugadores.get(i));
 				if(var <=2) {
 					opc = 3;
-					masDeBlackJack= jugadores.get(i).masDeBlackJack;
+					//masDeBlackJack= jugadores.get(i).masDeBlackJack;
+					//esBlackJack = jugadores.get(i).blackJack;
 					System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
 					break;
 				}
@@ -146,6 +149,8 @@ public class BlackJack {
 				
 				case 3: 
 					jugadores.get(i).plantarse();
+					//masDeBlackJack= jugadores.get(i).masDeBlackJack;
+					//esBlackJack = jugadores.get(i).blackJack;
 					System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
 				opc = 3;
 				break;
@@ -156,9 +161,10 @@ public class BlackJack {
 		}
 		
 		System.out.println("Turno del crupier");
-		crupier.turnoCrupier(masDeBlackJack);
+		crupier.turnoCrupier();
 		crupier.cobrar(jugadores);
 		crupier.nuevaRonda(jugadores);
+		
 		}while(jugadores.size()!=0);
 		}
 		//destapar carta cerrada

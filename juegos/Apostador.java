@@ -8,7 +8,7 @@ public class Apostador extends Jugador{
 	boolean juega;
 	
 	public Apostador(int monto, String nombre, int inicial, boolean juega) {
-		//super();
+		super();
 		this.monto = monto;
 		this.nombre = nombre;
 		this.apuestaInicial = inicial;

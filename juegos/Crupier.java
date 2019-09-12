@@ -44,10 +44,12 @@ public class Crupier extends Jugador {
 			  this.mano.get(mano.size()-1).setAbierta(false);
 		}
 	
-	public void turnoCrupier(boolean masDeBlackJack) {
+	public void turnoCrupier() {
 		
-		
-		if(!masDeBlackJack) {
+		//for(int i = 0; i<jugadores.size() ; i++) {
+		//if(jugadores.get(i).masDeBlackJack)
+		//	return;
+		//if(jugadores.get(i).blackJack || !jugadores.get(i).blackJack) {
 		this.mano.get(mano.size()-1).setAbierta(true);
 		this.acumulado =  this.acumulado + this.mano.get(this.mano.size()-1).valorAlterno;
 		this.acumuladoAlterno = this.acumuladoAlterno + this.mano.get(this.mano.size()-1).valorAlterno;
@@ -95,8 +97,8 @@ public class Crupier extends Jugador {
 			}
 			
 			}
-		}
-		return;
+		//}
+		//}
 		}
 	
 		
@@ -153,19 +155,19 @@ public class Crupier extends Jugador {
 		for(int i = 0; i<jugadores.size();i++) {
 			
 			if(jugadores.get(i).masDeBlackJack==true) {
-				System.out.println("El crupier le ganó con al jugador " + jugadores.get(i).nombre +" porque se pasó de 21");
+				System.out.println("El crupier ganó, " + jugadores.get(i).nombre +"  se pasó de 21\n");
 				this.monto = this.monto + jugadores.get(i).apuestaInicial;
 				jugadores.get(i).monto = jugadores.get(i).monto - jugadores.get(i).apuestaInicial;
 				continue;
 			}
 			
 			if(this.blackJack== true && jugadores.get(i).blackJack==true) {
-				System.out.println("Crupier y el jugador: " + jugadores.get(i).nombre + " empataron con BlackJack");
+				System.out.println("Crupier y el jugador: " + jugadores.get(i).nombre + " empataron con BlackJack\n");
 				continue;
 			}
 			if(this.masDeBlackJack && !jugadores.get(i).masDeBlackJack ) {
 				
-				System.out.println("El jugador " + jugadores.get(i).nombre + " gana, crupier se pasó de 21");
+				System.out.println("El jugador " + jugadores.get(i).nombre + " gana, crupier se pasó de 21\n");
 				jugadores.get(i).monto = jugadores.get(i).monto + jugadores.get(i).apuestaInicial;
 				this.monto = this.monto-jugadores.get(i).apuestaInicial;
 				continue;
@@ -173,7 +175,7 @@ public class Crupier extends Jugador {
 			} 
 			if(!this.masDeBlackJack && jugadores.get(i).masDeBlackJack) {
 				
-				System.out.println("El crupier le ganó con BlackJack al jugador " + jugadores.get(i).nombre);
+				System.out.println("El crupier le ganó con BlackJack al jugador " + jugadores.get(i).nombre +"\n");
 				this.monto = this.monto + jugadores.get(i).apuestaInicial;
 				jugadores.get(i).monto = jugadores.get(i).monto - jugadores.get(i).apuestaInicial;
 				continue;
@@ -227,14 +229,15 @@ public void nuevaRonda(ArrayList<Apostador> jugadores) {
 	int opc = 0;
 	Scanner scan = new Scanner(System.in);
 	int nuevaApuesta=0;
-	
-	 
+	int aux=jugadores.size();
+	int count = 0;
 	for(int i = 0; i<jugadores.size();i++) {
 		
-		opc = 0;
 		
-	 while(opc!=3){
-			
+		
+	// while(opc!=3){
+			if(aux==count)
+				return;
 			System.out.println("Jugador: " +jugadores.get(i).nombre+" ¿Deseas seguir jugando?");
 			
 			System.out.println("1 - Si"+"\n");
@@ -242,9 +245,13 @@ public void nuevaRonda(ArrayList<Apostador> jugadores) {
     
 	        opc = scan.nextInt();
 	        
-			switch(opc) {
-			case 1: 
-				System.out.println("¿Cual es la cantidad de tu nueva apuesta?");
+			//switch(opc) {
+			//case 1:
+	        
+	        
+	        if(opc==1) {
+				
+	            System.out.println("¿Cual es la cantidad de tu nueva apuesta?");
 				nuevaApuesta = scan.nextInt();
 				jugadores.get(i).setApuestaInicial(nuevaApuesta);
 				jugadores.get(i).acumulado = 0;
@@ -254,10 +261,12 @@ public void nuevaRonda(ArrayList<Apostador> jugadores) {
 				
 				barajaInl.mazo.addAll(jugadores.get(i).mano);  
 				jugadores.get(i).mano.removeAll(jugadores.get(i).mano);
+				count ++;
 				opc = 3;
-				break;
-			
-			case 2:
+				
+				continue;
+	        }
+	        else if (opc==2) {
 				System.out.println("Hasta luego y gracias por jugar " + jugadores.get(i).nombre + "!");
 				barajaInl.mazo.addAll(jugadores.get(i).mano);  
 				jugadores.get(i).acumulado = 0;
@@ -266,16 +275,17 @@ public void nuevaRonda(ArrayList<Apostador> jugadores) {
 				jugadores.get(i).masDeBlackJack=false;
 				jugadores.get(i).mano.removeAll(jugadores.get(i).mano);
 				jugadores.remove(i);
-				i=0;
+				count ++;
 				opc=3;
-				break;
-				
-			}
+				i=0;
+				continue;
+	        }
+			//}
 		
 			
-	 
 			
-			}
+			
+			//}
 			
 		}
 	this.acumulado = 0;
