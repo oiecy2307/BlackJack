@@ -73,7 +73,7 @@ public class BlackJack {
 					}
 					//Se agregan apostadores a la mesa de juego.
 					//montoJugador = montoJugador - apuestaInicial;
-					jugadores.add(new Apostador(montoJugador, nombreJugador,apuestaInicial,true));
+					jugadores.add(new Apostador(montoJugador, nombreJugador,apuestaInicial,true,0));
 				}catch(Exception e) {
 					scan.next();
 					System.out.println("Ingreso erroneo de datos, volver a empezar el ingreso del Jugador "+(i+1));
@@ -119,8 +119,8 @@ public class BlackJack {
 			+ "\n"+ "Puntos Alternos: " + jugadores.get(i).acumuladoAlterno+ "\n");
 			 
 			opc = 0;
-			masDeBlackJack = false;
-		    esBlackJack = false;
+			//masDeBlackJack = false;
+		    //esBlackJack = false;
 		    
 			 while(opc!=3){
 				
