@@ -21,7 +21,7 @@ public class BlackJack {
 		
 		
 			
-			//Scanner scan = new Scanner(System.in);
+			
 			int numJugadores=0;
             int montoCrupier=0;
             int montoJugador=0;
@@ -64,15 +64,16 @@ public class BlackJack {
 					System.out.println("Ingrese Apuesta inicial del Jugador "+(i+1));
 					apuestaInicial = scan.nextInt();
 					
-					//m = p.matcher(nombreJugador);
-					//Se evalua si el monto minimo es de 100 y que el nombre del jugador no tenga numeros . && m.matches()
+					
+					//Se evalua si el monto minimo es de 100 
 					if(montoJugador < 100 || apuestaInicial <10 || apuestaInicial>montoJugador) {
 						System.out.println("valores invalidos, por favor ingrese el último nuevamente.");
 						i--;
 						continue;
 					}
+					
 					//Se agregan apostadores a la mesa de juego.
-					//montoJugador = montoJugador - apuestaInicial;
+			
 					jugadores.add(new Apostador(montoJugador, nombreJugador,apuestaInicial,true,0));
 				}catch(Exception e) {
 					scan.next();
@@ -81,7 +82,7 @@ public class BlackJack {
 				}
 			}
 			scan.nextLine();
-			//Se inicia la mesa de juego
+			//Inicia el juego con el crupier y jugadores
 			Crupier crupier = new Crupier(montoCrupier);
 			iniciar(crupier,jugadores);
 			scan.close();
@@ -119,8 +120,7 @@ public class BlackJack {
 			+ "\n"+ "Puntos Alternos: " + jugadores.get(i).acumuladoAlterno+ "\n");
 			 
 			opc = 0;
-			//masDeBlackJack = false;
-		    //esBlackJack = false;
+		
 		    
 			 while(opc!=3){
 				
@@ -137,8 +137,6 @@ public class BlackJack {
 					var = crupier.repartirCarta(jugadores.get(i));
 				if(var <=2) {
 					opc = 3;
-					//masDeBlackJack= jugadores.get(i).masDeBlackJack;
-					//esBlackJack = jugadores.get(i).blackJack;
 					System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
 					break;
 				}
@@ -149,8 +147,6 @@ public class BlackJack {
 				
 				case 3: 
 					jugadores.get(i).plantarse();
-					//masDeBlackJack= jugadores.get(i).masDeBlackJack;
-					//esBlackJack = jugadores.get(i).blackJack;
 					System.out.println("Fin del turno de " +jugadores.get(i).nombre+ "\n");
 				opc = 3;
 				break;
@@ -161,17 +157,24 @@ public class BlackJack {
 		}
 		
 		System.out.println("Turno del crupier");
+		
+		/*Acciones del crupier, destapar carta cerrada, sumar acumulados y si es menor a 17 sigue sacando del mazo 
+		de lo contrario se planta el crupier */
+		
 		crupier.turnoCrupier();
+		
+		//evaluar quien tiene mas o menos puntos que el crupier para pagar la apuesta
 		crupier.cobrar(jugadores);
+		
+		//evaluar si quieren seguir jugando
 		crupier.nuevaRonda(jugadores);
 		
 		}while(jugadores.size()!=0);
 		}
-		//destapar carta cerrada
-		//sumar acumulados y si es menor a 17 sigue sacando del mazo de lo contrario se planta el crupier
-		//evaluar quien tiene mas o menos puntos que el crupier para pagar
-		//evaluar si quieren seguir jugando
-		//Acciones del crupier
+		
+		
+		
+		
 		
 		/**/
 		

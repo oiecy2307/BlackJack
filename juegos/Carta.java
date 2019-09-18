@@ -34,7 +34,9 @@ public class Carta<T> {
 		this.abierta = abierta;
 	}
 
-
+	/*
+	 Metodo toString para imprimir cada carta con su figura y numero.
+	 */
 	public String toString() {
 		String tipoCarta = "";
 		String descripcion = "";

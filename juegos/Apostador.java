@@ -36,11 +36,13 @@ public class Apostador extends Jugador{
 
 
 
-	public void doblar() {
-		
-	}
 
 
+	/*
+	 Este metodo se utiliza cuando el apostador decide plantarse, entonces se evalua con que puntaje de ha quedado
+	 y se envia un mensaje describiendo el estatus actual del juego del apostador.
+	 */
+	
 	public void plantarse() {
 		
 		if(this.cincoCartas == 5 && this.acumulado <=21) {

@@ -13,7 +13,7 @@ public class Crupier extends Jugador {
 		
 	}
 	
-	
+	//Metodo para barajar el mazo una vez que la baraja es creada
 	
 	public void Barajar() {
 		
@@ -21,6 +21,7 @@ public class Crupier extends Jugador {
 	}
 	
 	
+	//Este metodo es para repartirle dos cartas a cada jugador, y dos al crupier, la ultima entregada al crupier es tapada.
 	public void manoInicial(ArrayList<Apostador> jugadores) {
 		
 			  int tamanio= jugadores.size()*2;
@@ -44,12 +45,16 @@ public class Crupier extends Jugador {
 			  this.mano.get(mano.size()-1).setAbierta(false);
 		}
 	
+	
+	/*
+	  En este metodo se desarolla todo el turno del crupier una vez que han terminado de jugar los apostadores,
+	  se destapa la carta oculta del crupier, y dependiendo del puntaje obtenido despues de esa acción, el crupier
+	  seguira sacando cartas, si el puntaje llega a 17 o mas, el crupier debe plantarse.
+	
+	*/
 	public void turnoCrupier() {
 		
-		//for(int i = 0; i<jugadores.size() ; i++) {
-		//if(jugadores.get(i).masDeBlackJack)
-		//	return;
-		//if(jugadores.get(i).blackJack || !jugadores.get(i).blackJack) {
+		
 		this.mano.get(mano.size()-1).setAbierta(true);
 		this.acumulado =  this.acumulado + this.mano.get(this.mano.size()-1).valorAlterno;
 		this.acumuladoAlterno = this.acumuladoAlterno + this.mano.get(this.mano.size()-1).valorAlterno;
@@ -109,7 +114,7 @@ public class Crupier extends Jugador {
 		
 
 	
-	
+	//Este metodo se ejecuta cuando el apostador decide pedir una carta al crupier, y se va imprimiendo el status de la mano actual del apostador
 	public int repartirCarta(Apostador jugadores) {
 		
 		
@@ -117,7 +122,7 @@ public class Crupier extends Jugador {
 		jugadores.mano.add(barajaInl.mazo.remove(barajaInl.mazo.size()-1));
 		jugadores.cincoCartas++;
 		
-			jugadores.mostrarMano();
+			//jugadores.mostrarMano();
 			if(jugadores.acumuladoAlterno == 21 || jugadores.acumulado ==21) {
 				
 				jugadores.blackJack = true;
@@ -160,6 +165,12 @@ public class Crupier extends Jugador {
 		
 	}
 	
+	
+	/*
+	 En este metodo se evaluan los posibles casos donde el jugador ganó o perdió contra el crupier, por ende, 
+	  el crupier decide si le paga al apostador o si este ultimo le paga al crupier.
+	 
+	 */
 	public void cobrar(ArrayList<Apostador> jugadores) {
 		
 		for(int i = 0; i<jugadores.size();i++) {
@@ -321,6 +332,12 @@ public class Crupier extends Jugador {
 		}
 	}
 	
+	
+	/*
+	 En el metodo nuevaRonda, el crupier pregunta al apostador si desea seguir jugando, si el apostador ya no tiene fondos para
+	 seguir, acaba el juego para el, caso contrario, el apostador debe ingresar su nueva apuesta.
+	 */
+	
 public void nuevaRonda(ArrayList<Apostador> jugadores) {
 	
 	int opc = 0;
@@ -409,7 +426,7 @@ public void nuevaRonda(ArrayList<Apostador> jugadores) {
 	this.blackJack = false;
 	this.masDeBlackJack = false;
 barajaInl.mazo.addAll(this.mano);
-this.mano = new ArrayList<Carta>();//.removeAll(mano);
+this.mano = new ArrayList<Carta>();
 }
 }
 		

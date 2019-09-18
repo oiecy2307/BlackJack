@@ -9,6 +9,11 @@ public class BarajaInglesa extends Baraja   {
 		creaBaraja();
 		//super.shuffle();
 	}
+	
+	/*
+	 Metodo sobrecargado para crear una baraja de tipo inglesa, este método se ejecuta en el constructor de esta misma clase,
+	 entonces cuando se instancia un objeto de la clase BarajaInglesa, se crea una nueva baraja inglesa. 
+	 */
 	@Override
 	protected void creaBaraja() {
 		

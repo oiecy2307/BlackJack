@@ -10,7 +10,10 @@ public abstract class Jugador {
 	protected boolean blackJack= false;
 	protected boolean masDeBlackJack = false;
 	
-
+/*
+ El metodo mostrarMano es heredado a las clases crupier y apostador, puesto que ambos necesitan mostrar que cartas tienen
+ y comprobar cual de ambos es el ganador.
+ */
 	public String mostrarMano() {
 		String cadena = "";
 		this.acumulado=0;
